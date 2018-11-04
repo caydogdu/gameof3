@@ -1,5 +1,6 @@
 package com.gameof3.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
@@ -15,6 +16,7 @@ import com.gameof3.dto.RequestDto;
 import com.gameof3.entity.Game;
 import com.gameof3.repository.GameRepository;
 import com.gameof3.util.GameMessageSource;
+import com.gameof3.util.GameUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -48,6 +50,46 @@ public class GameServiceImplTest {
     }
 
     @Test
+    public void playAutoTest() throws Exception {
+
+        Game game = gameService.getAvailableGame();
+
+        RequestDto gr1 = new RequestDto();
+        gr1.setGameId(game.getId());
+        MessageDto message1 = gameService.join(gr1);
+        assertNotNull(message1);
+
+        RequestDto gr2 = new RequestDto();
+        gr2.setGameId(game.getId());
+        MessageDto message2 = gameService.join(gr2);
+        assertNotNull(message2);
+
+        RequestDto gr3 = new RequestDto();
+        gr3.setGameId(game.getId());
+        gr3.setPlayerId(0);
+        MessageDto message3 = gameService.start(gr3);
+        assertNotNull(message3);
+
+        boolean gameOver = false;
+        game = gameRepository.getGameById(game.getId());
+        while (!game.isGameOver()) {
+            game = gameRepository.getGameById(game.getId());
+            int adj = GameUtil.getAdjustmentToDivide3(game.getNumber());
+            RequestDto mr = new RequestDto();
+            mr.setGameId(game.getId());
+            mr.setAdjustment(String.valueOf(adj));
+            mr.setPlayerId(game.getTurn());
+            gameService.play(mr);
+            if (game.isGameOver()) {
+                gameOver = true;
+            }
+        }
+
+        assertEquals(true, gameOver);
+
+    }
+
+    @Test
     public void playTest() throws Exception {
 
         Game game = gameService.getAvailableGame();
@@ -67,6 +109,30 @@ public class GameServiceImplTest {
         gr3.setPlayerId(0);
         MessageDto message3 = gameService.start(gr3);
         assertNotNull(message3);
+
+        RequestDto gr4 = new RequestDto();
+        gr4.setGameId(game.getId());
+        gr4.setPlayerId(1);
+        gr4.setAdjustment(String.valueOf(1));
+        MessageDto message4 = gameService.play(gr4);
+        assertNotNull(message4);
+
+    }
+
+    @Test
+    public void playWhenGameIsNotStartedTest() throws Exception {
+
+        Game game = gameService.getAvailableGame();
+
+        RequestDto gr1 = new RequestDto();
+        gr1.setGameId(game.getId());
+        MessageDto message1 = gameService.join(gr1);
+        assertNotNull(message1);
+
+        RequestDto gr2 = new RequestDto();
+        gr2.setGameId(game.getId());
+        MessageDto message2 = gameService.join(gr2);
+        assertNotNull(message2);
 
         RequestDto gr4 = new RequestDto();
         gr4.setGameId(game.getId());
@@ -127,6 +193,31 @@ public class GameServiceImplTest {
         gr3.setPlayerId(0);
         MessageDto message3 = gameService.start(gr3);
         assertNotNull(message3);
+
+    }
+
+    @Test
+    public void startWhenGameIsAlreadyStartedTest() throws Exception {
+
+        Game game = gameService.getAvailableGame();
+
+        RequestDto gr1 = new RequestDto();
+        gr1.setGameId(game.getId());
+        MessageDto message1 = gameService.join(gr1);
+        assertNotNull(message1);
+
+        RequestDto gr2 = new RequestDto();
+        gr2.setGameId(game.getId());
+        MessageDto message2 = gameService.join(gr2);
+        assertNotNull(message2);
+
+        RequestDto gr3 = new RequestDto();
+        gr3.setGameId(game.getId());
+        gr3.setPlayerId(0);
+        MessageDto message3 = gameService.start(gr3);
+        assertNotNull(message3);
+        MessageDto message4 = gameService.start(gr3);
+        assertNotNull(message4);
 
     }
 
