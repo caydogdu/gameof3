@@ -71,13 +71,14 @@ public class GameServiceImpl implements GameService {
     @Override
     public MessageDto play(RequestDto request) {
         Game game = gameRepository.getGameById(request.getGameId());
+        Player player = playerRepository.getPlayerById((request.getPlayerId()));
 
+        if (game.isGameOver()) {
+            return new MessageDto(messageSource.getKey("MSG-02"));
+        }
         if (!game.isGameStarted()) {
             return start(request);
         }
-
-        Player player = playerRepository.getPlayerById((request.getPlayerId()));
-
         if (game.getTurn() != request.getPlayerId()) {
             Player turnPlayer = playerRepository.getPlayerById(game.getTurn());
             return new MessageDto(messageSource.getKey("MSG-05", turnPlayer.getName()));
@@ -91,13 +92,13 @@ public class GameServiceImpl implements GameService {
 
         game.setNumber((game.getNumber() + adjustment) / 3);
         game.switchTurn();
-
         if (game.getNumber() == 1) {
             game.setGameOver(true);
             gameRepository.save(game);
             return new MessageDto(messageSource.getKey("MSG-07", player.getName()));
         }
         gameRepository.save(game);
+
         return new MessageDto(messageSource.getKey("MSG-08", player.getName(), adjustment, game.getNumber()));
 
     }
