@@ -12,10 +12,15 @@ function setConnected(connected) {
     $("#messages").html("");
 }
 
-$.getJSON("/game", function(data) {
-console.log("gameId"+data.id)
-    gameId = data.id;
-    gameName = data.name;
+$.ajax({
+    url : '/game',
+    type : 'GET',
+    async: false,
+    success : function(data) {
+        console.log("gameId " + data.id)
+        gameId = data.id;
+        gameName = data.name;
+    }
 });
 
 var socket = new SockJS('/gameof3-websocket');
