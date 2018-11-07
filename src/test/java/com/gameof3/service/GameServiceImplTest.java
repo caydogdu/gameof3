@@ -117,6 +117,20 @@ public class GameServiceImplTest {
         MessageDto message4 = gameService.play(gr4);
         assertNotNull(message4);
 
+        RequestDto gr5 = new RequestDto();
+        gr5.setGameId(game.getId());
+        gr5.setPlayerId(0);
+        gr5.setAdjustment(String.valueOf(3));
+        MessageDto message5 = gameService.play(gr5);
+        assertNotNull(message5);
+
+        RequestDto gr6 = new RequestDto();
+        gr6.setGameId(game.getId());
+        gr6.setPlayerId(1);
+        gr6.setAdjustment("");
+        MessageDto message6 = gameService.play(gr6);
+        assertNotNull(message6);
+
     }
 
     @Test
