@@ -14,7 +14,9 @@ import com.gameof3.Application;
 import com.gameof3.dto.MessageDto;
 import com.gameof3.dto.RequestDto;
 import com.gameof3.entity.Game;
+import com.gameof3.entity.Player;
 import com.gameof3.repository.GameRepository;
+import com.gameof3.repository.PlayerRepository;
 import com.gameof3.util.GameMessageSource;
 import com.gameof3.util.GameUtil;
 
@@ -30,6 +32,9 @@ public class GameServiceImplTest {
 
     @Autowired
     GameRepository gameRepository;
+
+    @Autowired
+    PlayerRepository playerRepository;
 
     @Test
     public void getAvailableGameTest() throws Exception {
@@ -66,7 +71,7 @@ public class GameServiceImplTest {
 
         RequestDto gr3 = new RequestDto();
         gr3.setGameId(game.getId());
-        gr3.setPlayerId(0);
+        gr3.setPlayerId(message1.getPlayerId());
         MessageDto message3 = gameService.start(gr3);
         assertNotNull(message3);
 
@@ -78,7 +83,8 @@ public class GameServiceImplTest {
             RequestDto mr = new RequestDto();
             mr.setGameId(game.getId());
             mr.setAdjustment(String.valueOf(adj));
-            mr.setPlayerId(game.getTurn());
+            Player turnPlayer = playerRepository.getPlayerByGameIdAndIndex(game.getId(), game.getTurn());
+            mr.setPlayerId(turnPlayer.getId());
             gameService.play(mr);
             if (game.isGameOver()) {
                 gameOver = true;
@@ -106,27 +112,27 @@ public class GameServiceImplTest {
 
         RequestDto gr3 = new RequestDto();
         gr3.setGameId(game.getId());
-        gr3.setPlayerId(0);
+        gr3.setPlayerId(message1.getPlayerId());
         MessageDto message3 = gameService.start(gr3);
         assertNotNull(message3);
 
         RequestDto gr4 = new RequestDto();
         gr4.setGameId(game.getId());
-        gr4.setPlayerId(1);
+        gr4.setPlayerId(message2.getPlayerId());
         gr4.setAdjustment(String.valueOf(1));
         MessageDto message4 = gameService.play(gr4);
         assertNotNull(message4);
 
         RequestDto gr5 = new RequestDto();
         gr5.setGameId(game.getId());
-        gr5.setPlayerId(0);
+        gr5.setPlayerId(message1.getPlayerId());
         gr5.setAdjustment(String.valueOf(3));
         MessageDto message5 = gameService.play(gr5);
         assertNotNull(message5);
 
         RequestDto gr6 = new RequestDto();
         gr6.setGameId(game.getId());
-        gr6.setPlayerId(1);
+        gr6.setPlayerId(message2.getPlayerId());
         gr6.setAdjustment("");
         MessageDto message6 = gameService.play(gr6);
         assertNotNull(message6);
@@ -150,7 +156,7 @@ public class GameServiceImplTest {
 
         RequestDto gr4 = new RequestDto();
         gr4.setGameId(game.getId());
-        gr4.setPlayerId(1);
+        gr4.setPlayerId(message1.getPlayerId());
         gr4.setAdjustment(String.valueOf(1));
         MessageDto message4 = gameService.play(gr4);
         assertNotNull(message4);
@@ -174,13 +180,13 @@ public class GameServiceImplTest {
 
         RequestDto gr3 = new RequestDto();
         gr3.setGameId(game.getId());
-        gr3.setPlayerId(0);
+        gr3.setPlayerId(message1.getPlayerId());
         MessageDto message3 = gameService.start(gr3);
         assertNotNull(message3);
 
         RequestDto gr4 = new RequestDto();
         gr4.setGameId(game.getId());
-        gr4.setPlayerId(0);
+        gr4.setPlayerId(message1.getPlayerId());
         gr4.setAdjustment(String.valueOf(1));
         MessageDto message4 = gameService.play(gr4);
         assertNotNull(message4);
@@ -204,7 +210,7 @@ public class GameServiceImplTest {
 
         RequestDto gr3 = new RequestDto();
         gr3.setGameId(game.getId());
-        gr3.setPlayerId(0);
+        gr3.setPlayerId(message1.getPlayerId());
         MessageDto message3 = gameService.start(gr3);
         assertNotNull(message3);
 
@@ -227,7 +233,7 @@ public class GameServiceImplTest {
 
         RequestDto gr3 = new RequestDto();
         gr3.setGameId(game.getId());
-        gr3.setPlayerId(0);
+        gr3.setPlayerId(message1.getPlayerId());
         MessageDto message3 = gameService.start(gr3);
         assertNotNull(message3);
         MessageDto message4 = gameService.start(gr3);
@@ -247,7 +253,7 @@ public class GameServiceImplTest {
 
         RequestDto gr3 = new RequestDto();
         gr3.setGameId(game.getId());
-        gr3.setPlayerId(0);
+        gr3.setPlayerId(message1.getPlayerId());
         MessageDto message3 = gameService.start(gr3);
         assertNotNull(message3);
 

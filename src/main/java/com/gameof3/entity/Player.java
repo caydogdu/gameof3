@@ -2,6 +2,7 @@ package com.gameof3.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -10,6 +11,7 @@ import javax.persistence.Table;
 public class Player {
 
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private Long id;
 
@@ -19,12 +21,19 @@ public class Player {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "index")
+    private Long index;
+
     public Long getGameId() {
         return gameId;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Long getIndex() {
+        return index;
     }
 
     public String getName() {
@@ -37,6 +46,10 @@ public class Player {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setIndex(Long index) {
+        this.index = index;
     }
 
     public void setName(String name) {

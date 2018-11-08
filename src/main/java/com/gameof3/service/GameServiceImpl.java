@@ -49,10 +49,10 @@ public class GameServiceImpl implements GameService {
 
         List<Player> players = playerRepository.getByGameId(game.getId());
         Player player = new Player();
-        player.setId((long) players.size());
+        player.setIndex((long) players.size());
         player.setGameId(game.getId());
-        player.setName("Player" + (players.size() + 1));
-        playerRepository.save(player);
+        player.setName("Player" + new Random().nextInt(200));
+        player = playerRepository.save(player);
 
         MessageDto message = new MessageDto();
         message.setPlayerId(player.getId());
@@ -64,7 +64,7 @@ public class GameServiceImpl implements GameService {
 
     private Game openNewGame() {
         Game game = new Game();
-        game.setName("Game" + new Random().nextInt(20));
+        game.setName("Game" + new Random().nextInt(200));
         return gameRepository.save(game);
     }
 
@@ -79,8 +79,9 @@ public class GameServiceImpl implements GameService {
         if (!game.isGameStarted()) {
             return start(request);
         }
-        if (game.getTurn() != request.getPlayerId()) {
-            Player turnPlayer = playerRepository.getPlayerById(game.getTurn());
+
+        if (game.getTurn() != player.getIndex()) {
+            Player turnPlayer = playerRepository.getPlayerByGameIdAndIndex(game.getId(), game.getTurn());
             return new MessageDto(messageSource.getKey("MSG-05", turnPlayer.getName()));
         }
 
@@ -109,6 +110,7 @@ public class GameServiceImpl implements GameService {
         Player player = playerRepository.getPlayerById(request.getPlayerId());
 
         List<Player> players = playerRepository.getByGameId(game.getId());
+
         if (players.size() < 2) {
             return new MessageDto(messageSource.getKey("MSG-01"));
         }
@@ -118,7 +120,7 @@ public class GameServiceImpl implements GameService {
         }
 
         game.setNumber(100 + new Random().nextInt(200));
-        game.setTurn(player.getId());
+        game.setTurn(player.getIndex());
         game.switchTurn();
         game.setGameStarted(true);
         gameRepository.save(game);
