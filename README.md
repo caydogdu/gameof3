@@ -5,15 +5,19 @@ This is a Websocket game by Cemil Aydogdu.
 https://github.com/caydogdu/gameof3
 
 This project was developed with **spring boot**. Java 8 is required. **H2** in-memory database was used.
-For front-end **jQuery**, **bootstrap**, **SockJS** and **stomp** were used.
+For front-end **jQuery**, **Bootstrap**, **SockJS** and **Stomp** were used.
 
-To play run the project and open **localhost:8081** on any browser.
+To play, run the project and open **localhost:8081** on any browser.
 It is played with 2 players.
 
 When a player starts, a random whole number is generated and sent to the other player, which 
 indicates the start of the game. The receiving player must now add one of {-1, 0, 1} to get a 
 number that is divisible by 3 and then divide it. The resulting number is then sent back to the original sender.
 The same rules apply until one of the players reaches the number 1 after division, which ends the game.
+
+To see metrics http://localhost:8081/actuator/metrics/
+
+For online documentation of REST API http://localhost:8081/swagger-ui.html
 
 ## Run options and deployment
 
