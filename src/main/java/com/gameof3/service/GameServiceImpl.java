@@ -31,10 +31,10 @@ public class GameServiceImpl implements GameService {
     public Game getAvailableGame() {
         Game game;
         List<Game> games = gameRepository.findAll();
-        if (!games.isEmpty()) {
+        if (games != null && !games.isEmpty()) {
             game = games.get(games.size() - 1);
             List<Player> players = playerRepository.getByGameId(game.getId());
-            if (players.size() < 2) {
+            if (players != null && players.size() < 2) {
                 return game;
             } else {
                 return openNewGame();
@@ -47,12 +47,7 @@ public class GameServiceImpl implements GameService {
     public MessageDto join(RequestDto request) {
         Game game = gameRepository.getGameById(request.getGameId());
 
-        List<Player> players = playerRepository.getByGameId(game.getId());
-        Player player = new Player();
-        player.setIndex((long) players.size());
-        player.setGameId(game.getId());
-        player.setName("Player" + new Random().nextInt(200));
-        player = playerRepository.save(player);
+        Player player = savePlayer(game);
 
         MessageDto message = new MessageDto();
         message.setPlayerId(player.getId());
@@ -102,6 +97,16 @@ public class GameServiceImpl implements GameService {
 
         return new MessageDto(messageSource.getKey("MSG-08", player.getName(), adjustment, game.getNumber()));
 
+    }
+
+    private Player savePlayer(Game game) {
+        List<Player> players = playerRepository.getByGameId(game.getId());
+        Player player = new Player();
+        player.setIndex((long) players.size());
+        player.setGameId(game.getId());
+        player.setName("Player" + new Random().nextInt(200));
+        player = playerRepository.save(player);
+        return player;
     }
 
     @Override
