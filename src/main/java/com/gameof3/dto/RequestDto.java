@@ -8,18 +8,12 @@ public class RequestDto {
 
     private String adjustment;
 
-    private int number;
-
     public String getAdjustment() {
         return adjustment;
     }
 
     public long getGameId() {
         return gameId;
-    }
-
-    public int getNumber() {
-        return number;
     }
 
     public long getPlayerId() {
@@ -32,10 +26,6 @@ public class RequestDto {
 
     public void setGameId(long gameId) {
         this.gameId = gameId;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
     }
 
     public void setPlayerId(long playerId) {

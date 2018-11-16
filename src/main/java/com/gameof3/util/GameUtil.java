@@ -33,36 +33,12 @@ public class GameUtil {
      * @return adjustment value to divide number to 3
      */
     public static int getAdjustmentToDivide3(int number) {
-        int sum = GameUtil.sumOfDigits(number);
         for (int i = -1; i < 2; i++) {
-            if ((sum + i) % 3 == 0) {
+            if ((number + i) % 3 == 0) {
                 return i;
             }
         }
         return 0;
-    }
-
-    /**
-     *
-     * @param number
-     * @return sum of digits for given number
-     */
-    public static int sumOfDigits(int number) {
-        if (number < 10) {
-            return number;
-        }
-        int sum = 0;
-        while (number > 9) {
-            sum = 0;
-            while (number > 0) {
-                int rem;
-                rem = number % 10;
-                sum = sum + rem;
-                number = number / 10;
-            }
-            number = sum;
-        }
-        return sum;
     }
 
     private GameUtil() {
