@@ -18,6 +18,8 @@ import com.gameof3.util.GameUtil;
 @Service
 public class GameServiceImpl implements GameService {
 
+    private static final int PLAYER_COUNT = 2;
+
     @Autowired
     GameRepository gameRepository;
 
@@ -31,10 +33,10 @@ public class GameServiceImpl implements GameService {
     public Game getAvailableGame() {
         Game game;
         List<Game> games = gameRepository.findAll();
-        if (games != null && !games.isEmpty()) {
+        if (!games.isEmpty()) {
             game = games.get(games.size() - 1);
             List<Player> players = playerRepository.getByGameId(game.getId());
-            if (players != null && players.size() < 2) {
+            if (players.size() < PLAYER_COUNT) {
                 return game;
             } else {
                 return openNewGame();
@@ -116,7 +118,7 @@ public class GameServiceImpl implements GameService {
 
         List<Player> players = playerRepository.getByGameId(game.getId());
 
-        if (players.size() < 2) {
+        if (players.size() < PLAYER_COUNT) {
             return new MessageDto(messageSource.getKey("MSG-01"));
         }
 
