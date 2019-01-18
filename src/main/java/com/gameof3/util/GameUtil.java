@@ -19,6 +19,7 @@ public final class GameUtil {
 
     public static int getAdjustment(String adj, int number) {
         int adjustment = 0;
+
         if ("".equals(adj)) {
             adjustment = GameUtil.getAdjustmentToDivide3(number);
         } else {
