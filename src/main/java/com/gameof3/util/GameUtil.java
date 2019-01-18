@@ -1,6 +1,6 @@
 package com.gameof3.util;
 
-public class GameUtil {
+public final class GameUtil {
 
     /**
      *
