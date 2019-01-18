@@ -42,7 +42,7 @@ public final class GameUtil {
         return 0;
     }
 
-    // comment issue_1
+    // comment master
     private GameUtil() {
         // Utility class
     }
