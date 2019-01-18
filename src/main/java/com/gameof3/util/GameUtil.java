@@ -42,6 +42,7 @@ public final class GameUtil {
         return 0;
     }
 
+    // comment issue_1
     private GameUtil() {
         // Utility class
     }
